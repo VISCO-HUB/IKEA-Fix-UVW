@@ -17,7 +17,7 @@ HELP = \help\IKEA_fixUVW.html
 [ABOUT]
 
 Detect elements in Unwrap which fly in negative position.=
-Then set correct positon for this elements=
+Then set correct positon for this elements.=
 
 [SCRIPT]
 
