@@ -2,10 +2,17 @@
 [INFO]
 
 NAME = IKEA Fix UVW
-VERSION = 1.0.1
-AUTHOR = MastaMan
-DEV = ViscoCG
+VERSION = 1.0.2
+AUTHOR = Vasiliy Lukyanenko
+DEV = VISCO
 HELP = \help\IKEA_fixUVW.html
+
+[INSTALL]
+
+MACRO=IKEA_FixUVW
+CAT=IKEA
+TEXT=Fix UVW
+ICON=#("Material_Modifiers", 1)
 
 [1.0.0]
 
@@ -13,6 +20,9 @@ HELP = \help\IKEA_fixUVW.html
 
 [1.0.1]
 * Adopted for new Scripts Launcher=
+
+[1.0.2]
+*Changed: Work with several objects now=
 
 [ABOUT]
 
@@ -23,7 +33,7 @@ Then set correct positon for this elements.=
 
 */
 
-fn errorMessage = messageBox "Unwrap not applyed!" title: "Warning!"
+fn errorMessage name = messageBox "Unwrap not applyed for " + name + "!" title: "Warning!"
 	
 fn isGooPos i u = 
 (	
@@ -53,22 +63,25 @@ fn selectBadElements u =
 )
 
 fn fixUVW =
-(
+(	
 	-- Move selected in to center
 	if(selection[1] == undefined) do return messageBox "Please select object!" title: "Warning"
-	u = selection[1].modifiers[#unwrap_uvw]
-	if (classOf u != Unwrap_UVW) do return errorMessage()
+	for o in selection do
+	(
+		u = o.modifiers[#unwrap_uvw]
+		if (classOf u != Unwrap_UVW) do return errorMessage u.name
 
-	selectBadElements u
-	
-	u.snapPivot 2
-	c = u.getSelCenter()
-	o = u.getPivotOffset()
-	
-	m = [0, 0, 0] - c - o
-	u.moveSelected m
-	
-	u.edit()
+		selectBadElements u
+		
+		u.snapPivot 2
+		c = u.getSelCenter()
+		o = u.getPivotOffset()
+		
+		m = [0, 0, 0] - c - o
+		u.moveSelected m
+		
+		u.edit()
+	)
 )
 
 fixUVW()
